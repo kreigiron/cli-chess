@@ -10,15 +10,15 @@ public class Turn {
         this.nextTurnPlayer = nextTurnPlayer;
     }
 
-    public Player getCurrentPlayer() {
+    public Player getCurrentTurnPlayer() {
         return currentTurnPlayer;
     }
 
-    public Player getOtherPlayer() {
+    public Player getNextTurnPlayer() {
         return nextTurnPlayer;
     }
 
     public Turn next() {
-        return new Turn(getOtherPlayer(), getCurrentPlayer());
+        return new Turn(getNextTurnPlayer(), getCurrentTurnPlayer());
     }
 }

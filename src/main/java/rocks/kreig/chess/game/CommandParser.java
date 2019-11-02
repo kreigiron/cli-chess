@@ -1,5 +1,5 @@
 package rocks.kreig.chess.game;
 
 public interface CommandParser {
-    Command parse(String commandString);
+    Command parse(String commandString) throws InvalidMovementException;
 }

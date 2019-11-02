@@ -50,7 +50,7 @@ public class CliGameSession implements GameSession {
         while (true) {
             final String name = scanner.nextLine();
 
-            if(name.isEmpty()) {
+            if (name.isEmpty()) {
                 return playerColor.name().toLowerCase();
             }
 
@@ -72,9 +72,15 @@ public class CliGameSession implements GameSession {
         chessGame.initiate();
         while (chessGame.hasNextTurn()) {
             final Turn turn = chessGame.nextTurn();
-            final Player currentPlayer = turn.getCurrentPlayer();
+            playerTurn(turn);
+        }
+    }
 
-            while (true) {
+    private void playerTurn(Turn turn) {
+        final Player currentPlayer = turn.getCurrentTurnPlayer();
+
+        while (true) {
+            try {
                 System.out.println(currentPlayer.getName() + " - [" + currentPlayer.getPlayerColor() + "]" + " turn, please provide movement: ");
 
                 final String command = scanner.nextLine();
@@ -83,19 +89,22 @@ public class CliGameSession implements GameSession {
                     System.out.println(chessGame.getBoard());
                 } else if ("SURRENDER".equalsIgnoreCase(command)) {
                     chessGame.surrender(currentPlayer);
-                    System.out.println(turn.getCurrentPlayer() + " surrender, " + turn.getOtherPlayer() + " wins");
+                    System.out.println(turn.getCurrentTurnPlayer() + " surrender, " + turn.getNextTurnPlayer() + " wins");
 
                     return;
                 } else {
-                    final CheckStatus checkStatus = chessGame.tryMove(command);
+                    final CheckStatus checkStatus;
 
-                    if (checkStatus.isChecked()) {
-                        System.out.println(turn.getOtherPlayer() + " checked.");
-                    }
+                    checkStatus = chessGame.tryMove(command);
 
-                    break;
+//                    if (checkStatus.isChecked()) {
+//                        System.out.println(turn.getOtherPlayer() + " checked.");
+//                    }
+
+                    return;
                 }
-
+            } catch (InvalidMovementException e) {
+                System.out.println(e.getMessage());
             }
         }
     }

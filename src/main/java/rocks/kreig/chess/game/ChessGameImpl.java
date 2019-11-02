@@ -9,10 +9,15 @@ public class ChessGameImpl implements Game {
     private Board board;
 
     private CommandParser commandParser;
+    private Player surrenderPlayer;
 
     @Override
     public boolean hasNextTurn() {
-        return !isCheckMate();
+        return !isSurrender() && !isCheckMate();
+    }
+
+    private boolean isSurrender() {
+        return surrenderPlayer != null;
     }
 
     private boolean isCheckMate() {
@@ -21,11 +26,12 @@ public class ChessGameImpl implements Game {
 
     @Override
     public Turn nextTurn() {
-        return currentTurn.next();
+        this.currentTurn = currentTurn.next();
+        return currentTurn;
     }
 
     @Override
-    public CheckStatus tryMove(final String commandString) {
+    public CheckStatus tryMove(final String commandString) throws InvalidMovementException {
         final Command command = commandParser.parse(commandString);
         validateMovement(currentTurn, command);
         return move(command);
@@ -38,6 +44,7 @@ public class ChessGameImpl implements Game {
     }
 
     private void validateMovement(Turn currentTurn, Command command) {
+        System.out.println(command);
     //    validateBounds();
 //        validatePieceMovement();
     }
@@ -49,7 +56,7 @@ public class ChessGameImpl implements Game {
 
     @Override
     public void surrender(final Player surrenderPlayer) {
-
+        this.surrenderPlayer = surrenderPlayer;
     }
 
     @Override
@@ -62,6 +69,7 @@ public class ChessGameImpl implements Game {
     public Game initiate() {
         currentTurn = new Turn(black, white);
         board = new Board();
+        commandParser = new CommandParserImpl();
 
         return this;
     }
