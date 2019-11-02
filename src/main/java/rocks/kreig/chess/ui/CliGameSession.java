@@ -49,6 +49,11 @@ public class CliGameSession implements GameSession {
 
         while (true) {
             final String name = scanner.nextLine();
+
+            if(name.isEmpty()) {
+                return playerColor.name().toLowerCase();
+            }
+
             final Matcher matcher = validNamePattern.matcher(name);
 
             if (matcher.matches()) {
@@ -82,7 +87,11 @@ public class CliGameSession implements GameSession {
 
                     return;
                 } else {
-                    chessGame.tryMove(command);
+                    final CheckStatus checkStatus = chessGame.tryMove(command);
+
+                    if (checkStatus.isChecked()) {
+                        System.out.println(turn.getOtherPlayer() + " checked.");
+                    }
 
                     break;
                 }

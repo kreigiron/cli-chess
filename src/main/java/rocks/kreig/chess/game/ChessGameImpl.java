@@ -6,6 +6,10 @@ public class ChessGameImpl implements Game {
     private Player white;
     private Player black;
 
+    private Board board;
+
+    private CommandParser commandParser;
+
     @Override
     public boolean hasNextTurn() {
         return !isCheckMate();
@@ -21,13 +25,26 @@ public class ChessGameImpl implements Game {
     }
 
     @Override
-    public void tryMove(final String command) {
+    public CheckStatus tryMove(final String commandString) {
+        final Command command = commandParser.parse(commandString);
+        validateMovement(currentTurn, command);
+        return move(command);
+    }
 
+    private CheckStatus move(Command command) {
+        // final CheckStatus checkStatus = board.update(command);
+        //return checkStatus;
+        return null;
+    }
+
+    private void validateMovement(Turn currentTurn, Command command) {
+    //    validateBounds();
+//        validatePieceMovement();
     }
 
     @Override
     public Board getBoard() {
-        return new Board();
+        return board;
     }
 
     @Override
@@ -43,7 +60,8 @@ public class ChessGameImpl implements Game {
 
     @Override
     public Game initiate() {
-        currentTurn = new Turn(white, black);
+        currentTurn = new Turn(black, white);
+        board = new Board();
 
         return this;
     }

@@ -10,7 +10,7 @@ public interface Game {
 
     Game initiate();
 
-    void tryMove(String command);
+    CheckStatus tryMove(String command);
 
     Board getBoard();
 
