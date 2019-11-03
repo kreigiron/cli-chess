@@ -1,5 +1,7 @@
 package rocks.kreig.chess.game;
 
+import rocks.kreig.chess.game.piece.Piece;
+
 public class Cell {
     public static final int A = 0;
     public static final int B = 1;
@@ -12,6 +14,8 @@ public class Cell {
     private final int rank;
     private final int file;
 
+    private Piece piece;
+
 
     public Cell(int rank, int file) {
         this.rank = rank;
@@ -20,5 +24,21 @@ public class Cell {
 
     public boolean isShaded() {
         return (rank % 2 == 0) == (file % 2 == 0);
+    }
+
+    public void setPiece(final Piece piece) {
+        this.piece = piece;
+    }
+
+    public Piece getPiece() {
+        return piece;
+    }
+
+    @Override
+    public String toString() {
+        if (piece == null) {
+            return " ";
+        }
+        return piece.toString();
     }
 }

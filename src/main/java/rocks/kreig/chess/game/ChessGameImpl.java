@@ -68,8 +68,9 @@ public class ChessGameImpl implements Game {
     @Override
     public Game initiate() {
         currentTurn = new Turn(black, white);
-        board = new Board();
+        board = new Board(black, white);
         commandParser = new CommandParserImpl();
+
 
         return this;
     }
