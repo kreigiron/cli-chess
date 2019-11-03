@@ -10,7 +10,7 @@ public interface Game {
 
     Game initiate();
 
-    CheckStatus tryMove(String command) throws InvalidMovementException;
+    TurnStatus tryMove(String command) throws InvalidMovementException;
 
     Board getBoard();
 

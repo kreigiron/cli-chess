@@ -10,12 +10,17 @@ public class Command {
     private final int xEndPosition;
     private final int yEndPosition;
 
-    public Command(int moveCommand, int xStartPosition, int yStartPosition, int xEndPosition, int yEndPosition) {
+    private final String algebraicSourceCoordinates;
+    private final String algebraicDestinationCoordinates;
+
+    public Command(int moveCommand, int xStartPosition, int yStartPosition, int xEndPosition, int yEndPosition, final String algebraicSourceCoordinates, final String algebraicDestinationCoordinates) {
         this.moveCommand = moveCommand;
         this.xStartPosition = xStartPosition;
         this.yStartPosition = yStartPosition;
         this.xEndPosition = xEndPosition;
         this.yEndPosition = yEndPosition;
+        this.algebraicSourceCoordinates = algebraicSourceCoordinates;
+        this.algebraicDestinationCoordinates = algebraicDestinationCoordinates;
     }
 
     public int getMoveCommand() {
@@ -37,6 +42,15 @@ public class Command {
     public int getyEndPosition() {
         return yEndPosition;
     }
+
+    public String getAlgebraicSourceCoordinates() {
+        return algebraicSourceCoordinates;
+    }
+
+    public String getAlgebraicDestinationCoordinates() {
+        return algebraicDestinationCoordinates;
+    }
+
 
     @Override
     public String toString() {

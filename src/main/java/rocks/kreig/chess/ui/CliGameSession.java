@@ -93,9 +93,9 @@ public class CliGameSession implements GameSession {
 
                     return;
                 } else {
-                    final CheckStatus checkStatus;
+                    final TurnStatus turnStatus;
 
-                    checkStatus = chessGame.tryMove(command);
+                    turnStatus = chessGame.tryMove(command);
 
 //                    if (checkStatus.isChecked()) {
 //                        System.out.println(turn.getOtherPlayer() + " checked.");

@@ -22,7 +22,7 @@ public class CommandParserImpl implements CommandParser {
             final int xEndPosition = getCoordinate(matchResult.group(3));
             final int yEndPosition = Integer.parseInt(matchResult.group(4)) - 1;
 
-            return new Command(MOVE_COMMAND, xStartPosition, yStartPosition, xEndPosition, yEndPosition);
+            return new Command(MOVE_COMMAND, xStartPosition, yStartPosition, xEndPosition, yEndPosition, matchResult.group(1), matchResult.group(2));
 
         }
 

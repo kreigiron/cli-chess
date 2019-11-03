@@ -31,22 +31,23 @@ public class ChessGameImpl implements Game {
     }
 
     @Override
-    public CheckStatus tryMove(final String commandString) throws InvalidMovementException {
+    public TurnStatus tryMove(final String commandString) throws InvalidMovementException {
         final Command command = commandParser.parse(commandString);
         validateMovement(currentTurn, command);
         return move(command);
     }
 
-    private CheckStatus move(Command command) {
-        // final CheckStatus checkStatus = board.update(command);
-        //return checkStatus;
-        return null;
+    private TurnStatus move(final Command command) {
+        return board.update(currentTurn.getCurrentTurnPlayer(), command);
     }
 
-    private void validateMovement(Turn currentTurn, Command command) {
+    private void validateMovement(final Turn currentTurn, final Command command) throws InvalidMovementException {
         System.out.println(command);
-    //    validateBounds();
-//        validatePieceMovement();
+        validatePieceAllowedMovement(command, currentTurn);
+    }
+
+    private void validatePieceAllowedMovement(final Command command, final Turn currentTurn) throws InvalidMovementException {
+        board.canMove(command, currentTurn.getCurrentTurnPlayer());
     }
 
     @Override
@@ -71,6 +72,7 @@ public class ChessGameImpl implements Game {
         board = new Board(black, white);
         commandParser = new CommandParserImpl();
 
+        board.recalculateValidMovements();
 
         return this;
     }
