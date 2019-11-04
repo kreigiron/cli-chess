@@ -1,17 +1,15 @@
 package rocks.kreig.chess.game.piece;
 
-import rocks.kreig.chess.game.Board;
-import rocks.kreig.chess.game.Cell;
-import rocks.kreig.chess.game.Player;
-import rocks.kreig.chess.game.PlayerColor;
+import rocks.kreig.chess.game.board.Board;
+import rocks.kreig.chess.game.board.Cell;
+import rocks.kreig.chess.game.player.Player;
+import rocks.kreig.chess.game.player.PlayerColor;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
 public class Pawn extends Piece {
-
-    private boolean alreadyMoved;
 
     public Pawn(final Player player, final Cell cell) {
         super(player, cell);

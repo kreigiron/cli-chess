@@ -1,4 +1,4 @@
-package rocks.kreig.chess.game;
+package rocks.kreig.chess.game.player;
 
 public class Turn {
 

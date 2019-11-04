@@ -1,6 +1,11 @@
 package rocks.kreig.chess.ui;
 
 import rocks.kreig.chess.game.*;
+import rocks.kreig.chess.game.exception.InvalidMovementException;
+import rocks.kreig.chess.game.player.Player;
+import rocks.kreig.chess.game.player.PlayerColor;
+import rocks.kreig.chess.game.player.Turn;
+import rocks.kreig.chess.game.player.TurnStatus;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -68,6 +73,11 @@ public class CliGameSession implements GameSession {
     private void play() throws IOException {
         System.out.println("Game start!");
         System.out.println("==========");
+        System.out.println("Valid commands: ");
+        System.out.println(" board - show board ");
+        System.out.println(" move [origin] to [destination] - move piece from origin to destination, both origin and destination should be in algebraic notation.");
+        System.out.println(" stats - show current player stats ");
+        System.out.println(" surrender - surrender current player ");
 
         chessGame.initiate();
         while (chessGame.hasNextTurn()) {

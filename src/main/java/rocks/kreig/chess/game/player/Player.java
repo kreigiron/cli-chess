@@ -1,4 +1,4 @@
-package rocks.kreig.chess.game;
+package rocks.kreig.chess.game.player;
 
 import rocks.kreig.chess.game.piece.Piece;
 
@@ -32,7 +32,7 @@ public class Player {
         return "[" + playerColor + "] " + name;
     }
 
-    void addPiece(final Piece piece) {
+    public void addPiece(final Piece piece) {
         pieceList.add(piece);
     }
 

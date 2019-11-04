@@ -1,10 +1,12 @@
-package rocks.kreig.chess.game;
+package rocks.kreig.chess.game.command;
+
+import rocks.kreig.chess.game.exception.InvalidMovementException;
 
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static rocks.kreig.chess.game.Command.MOVE_COMMAND;
+import static rocks.kreig.chess.game.command.Command.MOVE_COMMAND;
 
 public class CommandParserImpl implements CommandParser {
     private static final String MOVE_COMMAND_REGEX = "^MOVE\\s+([A-H])([1-8])\\s+TO\\s+([A-H])([1-8])$";

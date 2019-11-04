@@ -1,5 +1,15 @@
 package rocks.kreig.chess.game;
 
+import rocks.kreig.chess.game.board.Board;
+import rocks.kreig.chess.game.exception.InvalidMovementException;
+import rocks.kreig.chess.game.command.Command;
+import rocks.kreig.chess.game.command.CommandParser;
+import rocks.kreig.chess.game.command.CommandParserImpl;
+import rocks.kreig.chess.game.player.Player;
+import rocks.kreig.chess.game.player.PlayerColor;
+import rocks.kreig.chess.game.player.Turn;
+import rocks.kreig.chess.game.player.TurnStatus;
+
 public class ChessGameImpl implements Game {
 
     private Turn currentTurn;
@@ -63,8 +73,6 @@ public class ChessGameImpl implements Game {
         currentTurn = new Turn(black, white);
         board = new Board(black, white);
         commandParser = new CommandParserImpl();
-
-        board.recalculateValidMovements();
 
         return this;
     }

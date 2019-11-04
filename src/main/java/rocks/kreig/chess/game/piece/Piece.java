@@ -1,16 +1,16 @@
 package rocks.kreig.chess.game.piece;
 
-import rocks.kreig.chess.game.Cell;
-import rocks.kreig.chess.game.InvalidMovementException;
-import rocks.kreig.chess.game.Player;
-import rocks.kreig.chess.game.TurnStatus;
+import rocks.kreig.chess.game.board.Cell;
+import rocks.kreig.chess.game.player.Player;
+import rocks.kreig.chess.game.player.TurnStatus;
+import rocks.kreig.chess.game.exception.InvalidMovementException;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static rocks.kreig.chess.game.PlayerColor.WHITE;
+import static rocks.kreig.chess.game.player.PlayerColor.WHITE;
 
 public abstract class Piece implements PieceMoveStrategy {
 
@@ -31,6 +31,7 @@ public abstract class Piece implements PieceMoveStrategy {
     }
 
     public abstract char charRepresentation();
+    public abstract List<Cell> updateCellMovementCandidates(final Cell destinationCell);
 
     @Override
     public String toString() {
@@ -44,14 +45,9 @@ public abstract class Piece implements PieceMoveStrategy {
         return owner;
     }
 
-    public Cell getCurrentCell() {
+    Cell getCurrentCell() {
         return currentCell;
     }
-
-    public void setCurrentCell(final Cell currentCell) {
-        this.currentCell = currentCell;
-    }
-
 
     /**
      * Checks for valid destination cells by filtering currently owned cells
@@ -71,7 +67,7 @@ public abstract class Piece implements PieceMoveStrategy {
         return false;
     }
 
-    public Cell getOriginalCell() {
+    Cell getOriginalCell() {
         return originalCell;
     }
 
@@ -86,12 +82,22 @@ public abstract class Piece implements PieceMoveStrategy {
         return updateAllowedMovements(this.currentCell);
     }
 
-
-    public List<Cell> getAllowedCellsToMove() {
-        return allowedCellsToMove;
+    public boolean isCaptured() {
+        return captured;
     }
 
-    TurnStatus updateAllowedMovements(final Cell currentCell) {
+    public void setCaptured(final boolean captured) {
+        this.captured = captured;
+    }
+
+    public void updateCurrentPieceMovements() {
+        this.allowedCellsToMove.clear();
+        this.allowedCellsToMove.addAll(updateCellMovementCandidates(this.currentCell));
+    }
+
+    public abstract String getType();
+
+    private TurnStatus updateAllowedMovements(final Cell currentCell) {
         final Player currentPlayer = getOwner();
         final Piece destinationPiece = currentCell.getPiece();
 
@@ -121,21 +127,4 @@ public abstract class Piece implements PieceMoveStrategy {
         return turnStatus;
     }
 
-    public abstract List<Cell> updateCellMovementCandidates(final Cell destinationCell);
-
-
-    public boolean isCaptured() {
-        return captured;
-    }
-
-    public void setCaptured(final boolean captured) {
-        this.captured = captured;
-    }
-
-    public void updateCurrentPieceMovements() {
-        this.allowedCellsToMove.clear();
-        this.allowedCellsToMove.addAll(updateCellMovementCandidates(this.currentCell));
-    }
-
-    public abstract String getType();
 }

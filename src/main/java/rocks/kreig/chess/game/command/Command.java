@@ -1,4 +1,4 @@
-package rocks.kreig.chess.game;
+package rocks.kreig.chess.game.command;
 
 public class Command {
     public static final int MOVE_COMMAND = 1;

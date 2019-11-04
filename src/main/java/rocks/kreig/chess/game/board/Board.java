@@ -1,6 +1,10 @@
-package rocks.kreig.chess.game;
+package rocks.kreig.chess.game.board;
 
+import rocks.kreig.chess.game.player.Player;
+import rocks.kreig.chess.game.player.TurnStatus;
+import rocks.kreig.chess.game.command.Command;
 import rocks.kreig.chess.game.piece.Bishop;
+import rocks.kreig.chess.game.exception.InvalidMovementException;
 import rocks.kreig.chess.game.piece.King;
 import rocks.kreig.chess.game.piece.Knight;
 import rocks.kreig.chess.game.piece.Pawn;
@@ -34,6 +38,68 @@ public class Board {
         this();
         initializePieces(black, white);
     }
+
+
+    public Optional<Cell> getCell(int file, int rank) {
+        if (file >= 0 && file < 8 && rank >= 0 && rank < 8) {
+            return Optional.of(cells[file][rank]);
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public String toString() {
+        String board = "\n";
+
+        board = board.concat("   1  2  3  4  5  6  7  8 \n");
+        for (int i = 0; i < 8; i++) {
+            board = board.concat((char) ('A' + i) + " ");
+
+            for (int j = 0; j < 8; j++) {
+                final Cell currentCell = cells[i][j];
+                board = board.concat((
+                        currentCell.isShaded() ?
+                                ANSI_BLACK_BACKGROUND + ANSI_WHITE + " " + currentCell + " " :
+                                ANSI_WHITE_BACKGROUND + ANSI_BLACK + " " + currentCell + " ") + ANSI_RESET);
+            }
+            board = board.concat("\n");
+        }
+
+
+        return board;
+    }
+
+    public void canMove(final Command command, final Player currentTurnPlayer) throws InvalidMovementException {
+        final Cell sourceCell = cells[command.getxStartPosition()][command.getyStartPosition()];
+        final Cell destinationCell = cells[command.getxEndPosition()][command.getyEndPosition()];
+
+        final Piece piece = sourceCell.getPiece();
+
+        if (piece == null) {
+            throw new InvalidMovementException("There's no piece to move at " + command.getAlgebraicSourceCoordinates());
+        }
+
+        if (!piece.getOwner().equals(currentTurnPlayer)) {
+            throw new InvalidMovementException("Cannot move other's player piece at " + command.getAlgebraicSourceCoordinates());
+        }
+
+        if (!piece.canMove(sourceCell, destinationCell)) {
+            throw new InvalidMovementException("Movement not allowed for piece  " + piece + " to destination " + destinationCell);
+        }
+    }
+
+    public TurnStatus update(final Player nextTurnPlayer, final Command command) {
+        final Cell sourceCell = cells[command.getxStartPosition()][command.getyStartPosition()];
+        final Piece piece = sourceCell.getPiece();
+        final Cell destinationCell = cells[command.getxEndPosition()][command.getyEndPosition()];
+
+        final TurnStatus turnStatus = piece.move(sourceCell, destinationCell);
+
+        updateNextPlayerAllowedMoves(nextTurnPlayer);
+
+        return turnStatus;
+    }
+
 
     private void initializePieces(final Player black, final Player white) {
 
@@ -94,42 +160,41 @@ public class Board {
         }
     }
 
-    private Piece addRook(final Player player, final Cell cell) {
+    private void addRook(final Player player, final Cell cell) {
         final Piece piece = new Rook(player, cell);
-        return linkPiece(player, cell, piece);
+        linkPiece(player, cell, piece);
     }
 
-    private Piece addKnight(Player player, Cell cell) {
+    private void addKnight(Player player, Cell cell) {
         final Piece piece = new Knight(player, cell);
-        return linkPiece(player, cell, piece);
+        linkPiece(player, cell, piece);
     }
 
-    private Piece addBishop(Player player, Cell cell) {
+    private void addBishop(Player player, Cell cell) {
         final Piece piece = new Bishop(player, cell);
-        return linkPiece(player, cell, piece);
+        linkPiece(player, cell, piece);
     }
 
-    private Piece addQueen(final Player player, final Cell cell) {
+    private void addQueen(final Player player, final Cell cell) {
         final Piece piece = new Queen(player, cell);
-        return linkPiece(player, cell, piece);
+        linkPiece(player, cell, piece);
     }
 
-    private Piece addKing(final Player player, final Cell cell) {
+    private void addKing(final Player player, final Cell cell) {
         final Piece piece = new King(player, cell);
-        return linkPiece(player, cell, piece);
+        linkPiece(player, cell, piece);
     }
 
-    private Piece addPawn(final Player player, final Cell cell) {
+    private void addPawn(final Player player, final Cell cell) {
         final Piece piece = new Pawn(player, cell);
-        return linkPiece(player, cell, piece);
+        linkPiece(player, cell, piece);
     }
 
-    private Piece linkPiece(final Player player, final Cell cell, final Piece piece) {
+    private void linkPiece(final Player player, final Cell cell, final Piece piece) {
         player.addPiece(piece);
         cell.setPiece(piece);
 
         currentPieces.get(piece.getOwner()).add(piece);
-        return piece;
     }
 
     private void initializeCells() {
@@ -138,70 +203,6 @@ public class Board {
                 cells[i][j] = new Cell(i, j, this);
             }
         }
-    }
-
-    public Optional<Cell> getCell(int file, int rank) {
-        if (file >= 0 && file < 8 && rank >= 0 && rank < 8) {
-            return Optional.of(cells[file][rank]);
-        }
-        return Optional.empty();
-    }
-
-    @Override
-    public String toString() {
-        String board = "\n";
-
-        board = board.concat("   1  2  3  4  5  6  7  8 \n");
-        for (int i = 0; i < 8; i++) {
-            board = board.concat((char) ('A' + i) + " ");
-
-            for (int j = 0; j < 8; j++) {
-                final Cell currentCell = cells[i][j];
-                board = board.concat((
-                        currentCell.isShaded() ?
-                                ANSI_BLACK_BACKGROUND + ANSI_WHITE + " " + currentCell + " " :
-                                ANSI_WHITE_BACKGROUND + ANSI_BLACK + " " + currentCell + " ") + ANSI_RESET);
-            }
-            board = board.concat("\n");
-        }
-
-
-        return board;
-    }
-
-    public void canMove(final Command command, final Player currentTurnPlayer) throws InvalidMovementException {
-        final Cell sourceCell = cells[command.getxStartPosition()][command.getyStartPosition()];
-        final Cell destinationCell = cells[command.getxEndPosition()][command.getyEndPosition()];
-
-        final Piece piece = sourceCell.getPiece();
-
-        if (piece == null) {
-            throw new InvalidMovementException("There's no piece to move at " + command.getAlgebraicSourceCoordinates());
-        }
-
-        if (!piece.getOwner().equals(currentTurnPlayer)) {
-            throw new InvalidMovementException("Cannot move other's player piece at " + command.getAlgebraicSourceCoordinates());
-        }
-
-        if (!piece.canMove(sourceCell, destinationCell)) {
-            throw new InvalidMovementException("Movement not allowed for piece  " + piece + " to destination " + destinationCell);
-        }
-    }
-
-    public void recalculateValidMovements() {
-
-    }
-
-    public TurnStatus update(final Player nextTurnPlayer, final Command command) {
-        final Cell sourceCell = cells[command.getxStartPosition()][command.getyStartPosition()];
-        final Piece piece = sourceCell.getPiece();
-        final Cell destinationCell = cells[command.getxEndPosition()][command.getyEndPosition()];
-
-        final TurnStatus turnStatus = piece.move(sourceCell, destinationCell);
-
-        updateNextPlayerAllowedMoves(nextTurnPlayer);
-
-        return turnStatus;
     }
 
     private void updateNextPlayerAllowedMoves(final Player nextTurnPlayer) {
