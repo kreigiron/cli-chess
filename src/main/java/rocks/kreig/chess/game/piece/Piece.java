@@ -1,6 +1,7 @@
 package rocks.kreig.chess.game.piece;
 
 import rocks.kreig.chess.game.Cell;
+import rocks.kreig.chess.game.InvalidMovementException;
 import rocks.kreig.chess.game.Player;
 import rocks.kreig.chess.game.TurnStatus;
 
@@ -56,7 +57,7 @@ public abstract class Piece implements PieceMoveStrategy {
      * Checks for valid destination cells by filtering currently owned cells
      */
     @Override
-    public boolean canMove(final Cell origin, final Cell destination) {
+    public boolean canMove(final Cell origin, final Cell destination) throws InvalidMovementException {
 
         Optional<Cell> allowedCell = allowedCellsToMove.parallelStream()
                 .filter(cell -> cell.equals(destination)).findFirst();

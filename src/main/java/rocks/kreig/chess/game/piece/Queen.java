@@ -1,6 +1,7 @@
 package rocks.kreig.chess.game.piece;
 
 import rocks.kreig.chess.game.Cell;
+import rocks.kreig.chess.game.InvalidMovementException;
 import rocks.kreig.chess.game.Player;
 
 import java.util.LinkedList;
@@ -13,8 +14,8 @@ public class Queen extends Piece {
     }
 
     @Override
-    public boolean canMove(final Cell origin, final Cell destination) {
-        throw new UnsupportedOperationException("Movement not yet implemented for this piece");
+    public boolean canMove(final Cell origin, final Cell destination) throws InvalidMovementException {
+        throw new InvalidMovementException("Movement not yet implemented for this piece");
     }
 
     @Override
