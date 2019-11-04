@@ -63,6 +63,11 @@ public class Pawn extends Piece {
         return allowedMovements;
     }
 
+    @Override
+    public String getType() {
+        return "PAWN";
+    }
+
     private boolean isAlreadyMoved() {
         return getCurrentCell().equals(getOriginalCell());
     }

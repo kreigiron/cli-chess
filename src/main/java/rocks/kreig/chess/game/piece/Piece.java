@@ -78,6 +78,7 @@ public abstract class Piece implements PieceMoveStrategy {
     public TurnStatus move(final Cell sourceCell, final Cell destinationCell) {
         // update piece references
         this.currentCell.setPiece(null);
+
         // update current cell references
         this.currentCell = destinationCell;
 
@@ -90,15 +91,15 @@ public abstract class Piece implements PieceMoveStrategy {
     }
 
     TurnStatus updateAllowedMovements(final Cell currentCell) {
-        final Player owner = getOwner();
+        final Player currentPlayer = getOwner();
         final Piece destinationPiece = currentCell.getPiece();
 
         final TurnStatus turnStatus = new TurnStatus();
 
         // capture piece if available
-        if (destinationPiece != null && !destinationPiece.getOwner().equals(owner) && destinationPiece.charRepresentation() != 'K') {
-            owner.capture(destinationPiece);
-            turnStatus.capture(destinationPiece, owner);
+        if (destinationPiece != null && !destinationPiece.getOwner().equals(currentPlayer) && destinationPiece.charRepresentation() != 'K') {
+            currentPlayer.capture(destinationPiece);
+            turnStatus.capture(destinationPiece, currentPlayer);
         }
 
         currentCell.setPiece(this);
@@ -134,4 +135,6 @@ public abstract class Piece implements PieceMoveStrategy {
         this.allowedCellsToMove.clear();
         this.allowedCellsToMove.addAll(updateCellMovementCandidates(this.currentCell));
     }
+
+    public abstract String getType();
 }

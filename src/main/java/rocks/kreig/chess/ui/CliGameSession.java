@@ -100,7 +100,7 @@ public class CliGameSession implements GameSession {
                     turnStatus = chessGame.tryMove(command);
 
                     if (turnStatus.getCaptured() != null) {
-                        System.out.println(turnStatus.getCapturedBy() + " captures " + turnStatus.getCaptured() + " from the rival" );
+                        System.out.println(turnStatus.getCapturedBy() + " captures " + turnStatus.getCaptured().getType() + " from the rival" );
                     }
 
                     if (turnStatus.isChecked()) {

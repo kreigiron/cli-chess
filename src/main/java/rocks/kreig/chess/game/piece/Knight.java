@@ -14,12 +14,17 @@ public class Knight extends Piece {
 
     @Override
     public boolean canMove(final Cell origin, final Cell destination) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Movement not yet implemented for this piece");
     }
 
     @Override
     public List<Cell> updateCellMovementCandidates(final Cell destinationCell) {
         return new LinkedList<>();
+    }
+
+    @Override
+    public String getType() {
+        return "KNIGHT";
     }
 
     @Override

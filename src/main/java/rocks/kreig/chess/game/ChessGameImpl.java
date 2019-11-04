@@ -33,21 +33,13 @@ public class ChessGameImpl implements Game {
     @Override
     public TurnStatus tryMove(final String commandString) throws InvalidMovementException {
         final Command command = commandParser.parse(commandString);
-        validateMovement(currentTurn, command);
+
+        board.canMove(command, currentTurn.getCurrentTurnPlayer());
         return move(command);
     }
 
     private TurnStatus move(final Command command) {
         return board.update(currentTurn.getNextTurnPlayer(), command);
-    }
-
-    private void validateMovement(final Turn currentTurn, final Command command) throws InvalidMovementException {
-        System.out.println(command);
-        validatePieceAllowedMovement(command, currentTurn);
-    }
-
-    private void validatePieceAllowedMovement(final Command command, final Turn currentTurn) throws InvalidMovementException {
-        board.canMove(command, currentTurn.getCurrentTurnPlayer());
     }
 
     @Override

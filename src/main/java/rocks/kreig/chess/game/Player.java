@@ -5,6 +5,7 @@ import rocks.kreig.chess.game.piece.Piece;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Player {
     private final String name;
@@ -55,7 +56,11 @@ public class Player {
 
     public String getStats() {
         String stats = "Stats for " + this + ":\n";
-        stats += "Pieces: " + pieceList.size() + " \n "  + pieceList;
+        final List piecesAvailable = pieceList.stream().filter(piece -> !piece.isCaptured()).collect(Collectors.toList());
+        final List piecesCaptured = pieceList.stream().filter(Piece::isCaptured).collect(Collectors.toList());
+        stats += "Pieces available: " + piecesAvailable.size() + " \n "  + piecesAvailable;
+        stats += "\n";
+        stats += "Captured pieces: " + piecesCaptured.size() + " \n "  + piecesCaptured;
         stats += "\n";
         stats += "Captures: " + capturesList.size() + " \n "  + capturesList;
 

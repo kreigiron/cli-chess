@@ -26,7 +26,7 @@ public class CommandParserImpl implements CommandParser {
 
         }
 
-        throw new InvalidMovementException("Invalid command, please provide a valid move with proper file and rank. (e.g. move a1 to b2 ");
+        throw new InvalidMovementException("Invalid command, please provide a valid move with proper file and rank. (e.g. move a1 to b2 ).\n You can also specify commands to show board (BOARD), print stats (STATS), or surrender (SURRENDER)\n");
 
     }
 
