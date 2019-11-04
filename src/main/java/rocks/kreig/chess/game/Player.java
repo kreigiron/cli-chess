@@ -50,5 +50,16 @@ public class Player {
 
     public void capture(final Piece destinationPiece) {
         this.capturesList.add(destinationPiece);
+        destinationPiece.setCaptured(true);
+    }
+
+    public String getStats() {
+        String stats = "Stats for " + this + ":\n";
+        stats += "Pieces: " + pieceList.size() + " \n "  + pieceList;
+        stats += "\n";
+        stats += "Captures: " + capturesList.size() + " \n "  + capturesList;
+
+        return stats;
+
     }
 }

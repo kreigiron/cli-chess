@@ -5,17 +5,17 @@ import rocks.kreig.chess.game.Cell;
 import rocks.kreig.chess.game.Player;
 import rocks.kreig.chess.game.PlayerColor;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
 public class Pawn extends Piece {
 
-    private boolean initialMove = true;
+    private boolean alreadyMoved;
 
     public Pawn(final Player player, final Cell cell) {
         super(player, cell);
     }
-
 
     @Override
     public char charRepresentation() {
@@ -23,29 +23,47 @@ public class Pawn extends Piece {
     }
 
     @Override
-    List<Cell> updateCellMovementCandidates(final Cell destinationCell) {
-        final int allowedRankOffset = initialMove ? 2 : 1;
+    public List<Cell> updateCellMovementCandidates(final Cell currentCell) {
+        final List<Cell> allowedMovements = new LinkedList<>();
 
-        final Board board = destinationCell.getBoard();
+        final int allowedRankOffset = isAlreadyMoved() ? 2 : 1;
 
-        for (int i = 0; i < allowedRankOffset; i++) {
-            int currentRank = destinationCell.getRank();
-            int currentFile = destinationCell.getFile();
+        final Board board = currentCell.getBoard();
 
-            if (getOwner().getPlayerColor() == PlayerColor.WHITE) {
-                currentRank++;
-            } else {
-                currentRank--;
+        final int currentRank = currentCell.getRank();
+        final int currentFile = currentCell.getFile();
+
+        int step = (getOwner().getPlayerColor() == PlayerColor.WHITE) ? 1 : -1;
+
+        for (int i = 1; i <= allowedRankOffset; i++) {
+            final Optional<Cell> cellToUpdate = board.getCell(currentFile, currentRank + i * step);
+
+            if (cellToUpdate.isPresent()) {
+                // disallow movement on rival piece cell if movement is not capture
+                final Cell cell = cellToUpdate.get();
+                final Piece piece = cell.getPiece();
+                if (piece == null) {
+                    allowedMovements.add(cell);
+                }
             }
-
-            final Optional<Cell> cellToUpdate = board.getCell(currentFile, currentRank);
-
-            cellToUpdate.ifPresent(cell -> this.getAllowedCellsToMove().add(cell));
         }
 
-        initialMove = false;
-        return null;
+        // mark cell movement to capture move
+        final Optional<Cell> firstDiagonalCell = board.getCell(currentFile + 1, currentRank + step);
+        final Optional<Cell> secondDiagonalCell = board.getCell(currentFile - 1, currentRank + step);
+
+        if (firstDiagonalCell.isPresent() && firstDiagonalCell.get().getPiece() != null && firstDiagonalCell.get().getPiece().getOwner() != this.getOwner()) {
+            allowedMovements.add(firstDiagonalCell.get());
+        }
+
+        if (secondDiagonalCell.isPresent() && secondDiagonalCell.get().getPiece() != null && secondDiagonalCell.get().getPiece().getOwner() != this.getOwner()) {
+            allowedMovements.add(secondDiagonalCell.get());
+        }
+
+        return allowedMovements;
     }
 
-
+    private boolean isAlreadyMoved() {
+        return getCurrentCell().equals(getOriginalCell());
+    }
 }

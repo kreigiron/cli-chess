@@ -42,56 +42,54 @@ public class Board {
 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                Piece piece = null;
                 // rooks
                 if ((i == 0 || i == 7) && j == 0) {
-                    piece = addRook(white, cells[i][j]);
+                    addRook(white, cells[i][j]);
                 }
                 if ((i == 0 || i == 7) && j == 7) {
-                    piece = addRook(black, cells[i][j]);
+                    addRook(black, cells[i][j]);
                 }
 
                 // knights
                 if ((i == 1 || i == 6) && j == 0) {
-                    piece = addKnight(white, cells[i][j]);
+                    addKnight(white, cells[i][j]);
                 }
                 if ((i == 1 || i == 6) && j == 7) {
-                    piece = addKnight(black, cells[i][j]);
+                    addKnight(black, cells[i][j]);
                 }
 
                 // bishops
                 if ((i == 2 || i == 5) && j == 0) {
-                    piece = addBishop(white, cells[i][j]);
+                    addBishop(white, cells[i][j]);
                 }
                 if ((i == 2 || i == 5) && j == 7) {
-                    piece = addBishop(black, cells[i][j]);
+                    addBishop(black, cells[i][j]);
                 }
 
                 // Queens
                 if (i == 3 && j == 0) {
-                    piece = addQueen(white, cells[i][j]);
+                    addQueen(white, cells[i][j]);
                 }
                 if (i == 3 && j == 7) {
-                    piece = addQueen(black, cells[i][j]);
+                    addQueen(black, cells[i][j]);
                 }
 
                 // Kings
                 if (i == 4 && j == 0) {
-                    piece = addKing(white, cells[i][j]);
+                    addKing(white, cells[i][j]);
                 }
                 if (i == 4 && j == 7) {
-                    piece = addKing(black, cells[i][j]);
+                    addKing(black, cells[i][j]);
                 }
 
                 // pawns
                 if (j == 1) {
-                    piece = addPawn(white, cells[i][j]);
+                    addPawn(white, cells[i][j]);
                 }
                 if (j == 6) {
-                    piece = addPawn(black, cells[i][j]);
+                    addPawn(black, cells[i][j]);
                 }
 
-                currentPieces.get(piece.getOwner()).add(piece);
             }
         }
     }
@@ -129,6 +127,8 @@ public class Board {
     private Piece linkPiece(final Player player, final Cell cell, final Piece piece) {
         player.addPiece(piece);
         cell.setPiece(piece);
+
+        currentPieces.get(piece.getOwner()).add(piece);
         return piece;
     }
 
@@ -141,7 +141,7 @@ public class Board {
     }
 
     public Optional<Cell> getCell(int file, int rank) {
-        if(file >= 0 && file < 8 && rank >=0 && rank <8) {
+        if (file >= 0 && file < 8 && rank >= 0 && rank < 8) {
             return Optional.of(cells[file][rank]);
         }
         return Optional.empty();
@@ -151,7 +151,10 @@ public class Board {
     public String toString() {
         String board = "\n";
 
+        board = board.concat("   1  2  3  4  5  6  7  8 \n");
         for (int i = 0; i < 8; i++) {
+            board = board.concat((char) ('A' + i) + " ");
+
             for (int j = 0; j < 8; j++) {
                 final Cell currentCell = cells[i][j];
                 board = board.concat((
@@ -161,6 +164,7 @@ public class Board {
             }
             board = board.concat("\n");
         }
+
 
         return board;
     }
@@ -179,7 +183,7 @@ public class Board {
             throw new InvalidMovementException("Cannot move other's player piece at " + command.getAlgebraicSourceCoordinates());
         }
 
-        if (piece.canMove(sourceCell, destinationCell)) {
+        if (!piece.canMove(sourceCell, destinationCell)) {
             throw new InvalidMovementException("Movement not allowed for piece  " + piece + " to destination " + destinationCell);
         }
     }
@@ -188,11 +192,22 @@ public class Board {
 
     }
 
-    public TurnStatus update(final Player currentTurnPlayer, final Command command) {
+    public TurnStatus update(final Player nextTurnPlayer, final Command command) {
         final Cell sourceCell = cells[command.getxStartPosition()][command.getyStartPosition()];
         final Piece piece = sourceCell.getPiece();
         final Cell destinationCell = cells[command.getxEndPosition()][command.getyEndPosition()];
 
-        return piece.move(sourceCell, destinationCell);
+        final TurnStatus turnStatus = piece.move(sourceCell, destinationCell);
+
+        updateNextPlayerAllowedMoves(nextTurnPlayer);
+
+        return turnStatus;
     }
+
+    private void updateNextPlayerAllowedMoves(final Player nextTurnPlayer) {
+        this.currentPieces.get(nextTurnPlayer).stream()
+                .filter(piece -> !piece.isCaptured())
+                .forEach(Piece::updateCurrentPieceMovements);
+    }
+
 }

@@ -3,6 +3,7 @@ package rocks.kreig.chess.game.piece;
 import rocks.kreig.chess.game.Cell;
 import rocks.kreig.chess.game.Player;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class Bishop extends Piece {
@@ -17,8 +18,8 @@ public class Bishop extends Piece {
     }
 
     @Override
-    List<Cell> updateCellMovementCandidates(final Cell destinationCell) {
-        throw new UnsupportedOperationException("Not yet implemented");
+    public List<Cell> updateCellMovementCandidates(final Cell destinationCell) {
+        return new LinkedList<>();
     }
 
     @Override

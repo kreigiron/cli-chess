@@ -85,8 +85,10 @@ public class CliGameSession implements GameSession {
 
                 final String command = scanner.nextLine();
 
-                if ("SHOW".equalsIgnoreCase(command)) {
+                if ("BOARD".equalsIgnoreCase(command)) {
                     System.out.println(chessGame.getBoard());
+                } else if ("STATS".equalsIgnoreCase(command)) {
+                    System.out.println(currentPlayer.getStats());
                 } else if ("SURRENDER".equalsIgnoreCase(command)) {
                     chessGame.surrender(currentPlayer);
                     System.out.println(turn.getCurrentTurnPlayer() + " surrender, " + turn.getNextTurnPlayer() + " wins");
@@ -97,9 +99,15 @@ public class CliGameSession implements GameSession {
 
                     turnStatus = chessGame.tryMove(command);
 
-//                    if (checkStatus.isChecked()) {
-//                        System.out.println(turn.getOtherPlayer() + " checked.");
-//                    }
+                    if (turnStatus.getCaptured() != null) {
+                        System.out.println(turnStatus.getCapturedBy() + " captures " + turnStatus.getCaptured() + " from the rival" );
+                    }
+
+                    if (turnStatus.isChecked()) {
+                        System.out.println(turn.getNextTurnPlayer() + " checked by " + turnStatus.getCheckedBy() );
+                    }
+                    System.out.println("Board status:");
+                    System.out.println(chessGame.getBoard());
 
                     return;
                 }

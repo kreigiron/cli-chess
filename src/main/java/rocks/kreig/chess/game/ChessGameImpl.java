@@ -38,7 +38,7 @@ public class ChessGameImpl implements Game {
     }
 
     private TurnStatus move(final Command command) {
-        return board.update(currentTurn.getCurrentTurnPlayer(), command);
+        return board.update(currentTurn.getNextTurnPlayer(), command);
     }
 
     private void validateMovement(final Turn currentTurn, final Command command) throws InvalidMovementException {
