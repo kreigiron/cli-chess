@@ -7,6 +7,7 @@ import rocks.kreig.chess.game.exception.InvalidMovementException;
 import java.util.LinkedList;
 import java.util.List;
 
+/* Knight piece */
 public class Knight extends Piece {
 
     public Knight(final Player player, final Cell cell) {

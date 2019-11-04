@@ -1,5 +1,6 @@
 package rocks.kreig.chess.game.player;
 
+/** Turn abstraction to switch player's turn */
 public class Turn {
 
     private Player currentTurnPlayer;

@@ -1,9 +1,9 @@
 package rocks.kreig.chess.game.piece;
 
 import rocks.kreig.chess.game.board.Cell;
+import rocks.kreig.chess.game.exception.InvalidMovementException;
 import rocks.kreig.chess.game.player.Player;
 import rocks.kreig.chess.game.player.TurnStatus;
-import rocks.kreig.chess.game.exception.InvalidMovementException;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -12,6 +12,7 @@ import java.util.Optional;
 
 import static rocks.kreig.chess.game.player.PlayerColor.WHITE;
 
+/** Abstract operations for Pieces, defines generic movement and capture logic, and cell boundaries updates */
 public abstract class Piece implements PieceMoveStrategy {
 
     private final Player owner;
@@ -30,8 +31,32 @@ public abstract class Piece implements PieceMoveStrategy {
         this.allowedCellsToMove.addAll(updateCellMovementCandidates(cell));
     }
 
-    public abstract char charRepresentation();
-    public abstract List<Cell> updateCellMovementCandidates(final Cell destinationCell);
+    /**
+     * Checks for valid destination cells by filtering currently owned cells
+     */
+    public boolean canMove(final Cell origin, final Cell destination) throws InvalidMovementException {
+
+        Optional<Cell> allowedCell = allowedCellsToMove.parallelStream()
+                .filter(cell -> cell.equals(destination)).findFirst();
+
+        if (allowedCell.isPresent()) {
+            final Cell cell = allowedCell.get();
+            final Piece piece = cell.getPiece();
+
+            return piece == null || !piece.getOwner().equals(this.getOwner());
+        }
+        return false;
+    }
+
+    public TurnStatus move(final Cell destinationCell) {
+        // update piece references
+        this.currentCell.setPiece(null);
+
+        // update current cell references
+        this.currentCell = destinationCell;
+
+        return updateAllowedMovements(this.currentCell);
+    }
 
     @Override
     public String toString() {
@@ -49,37 +74,8 @@ public abstract class Piece implements PieceMoveStrategy {
         return currentCell;
     }
 
-    /**
-     * Checks for valid destination cells by filtering currently owned cells
-     */
-    @Override
-    public boolean canMove(final Cell origin, final Cell destination) throws InvalidMovementException {
-
-        Optional<Cell> allowedCell = allowedCellsToMove.parallelStream()
-                .filter(cell -> cell.equals(destination)).findFirst();
-
-        if (allowedCell.isPresent()) {
-            final Cell cell = allowedCell.get();
-            final Piece piece = cell.getPiece();
-
-            return piece == null || !piece.getOwner().equals(this.getOwner());
-        }
-        return false;
-    }
-
     Cell getOriginalCell() {
         return originalCell;
-    }
-
-    @Override
-    public TurnStatus move(final Cell sourceCell, final Cell destinationCell) {
-        // update piece references
-        this.currentCell.setPiece(null);
-
-        // update current cell references
-        this.currentCell = destinationCell;
-
-        return updateAllowedMovements(this.currentCell);
     }
 
     public boolean isCaptured() {
@@ -97,9 +93,10 @@ public abstract class Piece implements PieceMoveStrategy {
 
     public abstract String getType();
 
-    private TurnStatus updateAllowedMovements(final Cell currentCell) {
+    /** Updates current piece list of allowed movements for the specified cell */
+    private TurnStatus updateAllowedMovements(final Cell cell) {
         final Player currentPlayer = getOwner();
-        final Piece destinationPiece = currentCell.getPiece();
+        final Piece destinationPiece = cell.getPiece();
 
         final TurnStatus turnStatus = new TurnStatus();
 
@@ -109,10 +106,10 @@ public abstract class Piece implements PieceMoveStrategy {
             turnStatus.capture(destinationPiece, currentPlayer);
         }
 
-        currentCell.setPiece(this);
+        cell.setPiece(this);
 
         this.allowedCellsToMove.clear();
-        this.allowedCellsToMove.addAll(updateCellMovementCandidates(currentCell));
+        this.allowedCellsToMove.addAll(updateCellMovementCandidates(cell));
 
         // Look for check movement
         allowedCellsToMove.parallelStream()
@@ -122,7 +119,7 @@ public abstract class Piece implements PieceMoveStrategy {
                 .findFirst()
                 .ifPresent(piece -> turnStatus.check(piece.getOwner()));
 
-        currentCell.setPiece(this);
+        cell.setPiece(this);
 
         return turnStatus;
     }

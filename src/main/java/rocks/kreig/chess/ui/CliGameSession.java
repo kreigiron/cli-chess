@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+/** Command line game session */
 public class CliGameSession implements GameSession {
 
     public static final String VALID_NAME_REGEX = "\\w{1,16}";
@@ -70,7 +70,7 @@ public class CliGameSession implements GameSession {
         }
     }
 
-    private void play() throws IOException {
+    private void play() {
         System.out.println("Game start!");
         System.out.println("==========");
         System.out.println("Valid commands: ");

@@ -4,6 +4,7 @@ import rocks.kreig.chess.game.piece.Piece;
 
 import java.util.Objects;
 
+/** Abstraction of a chess board cell identified by rank and file and may contains a Piece */
 public class Cell {
     private final int rank;
     private final int file;

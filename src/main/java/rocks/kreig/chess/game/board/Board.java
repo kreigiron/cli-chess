@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/** Abstraction of a chess board which contains the cells and the pieces for each player */
 public class Board {
     private static final String ANSI_RESET = "\u001B[0m";
     private static final String ANSI_BLACK = "\u001B[30m";
@@ -93,7 +94,7 @@ public class Board {
         final Piece piece = sourceCell.getPiece();
         final Cell destinationCell = cells[command.getxEndPosition()][command.getyEndPosition()];
 
-        final TurnStatus turnStatus = piece.move(sourceCell, destinationCell);
+        final TurnStatus turnStatus = piece.move(destinationCell);
 
         updateNextPlayerAllowedMoves(nextTurnPlayer);
 

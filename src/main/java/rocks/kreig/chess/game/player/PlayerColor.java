@@ -1,5 +1,6 @@
 package rocks.kreig.chess.game.player;
 
+/** Enum to identify player colors */
 public enum PlayerColor {
     WHITE(1),
     BLACK(2);

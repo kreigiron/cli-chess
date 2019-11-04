@@ -7,6 +7,7 @@ import rocks.kreig.chess.game.exception.InvalidMovementException;
 import java.util.LinkedList;
 import java.util.List;
 
+/* Bishop piece */
 public class Bishop extends Piece {
 
     public Bishop(final Player player, final Cell cell) {

@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+/* Pawn piece */
 public class Pawn extends Piece {
 
     public Pawn(final Player player, final Cell cell) {

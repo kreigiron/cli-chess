@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 import static rocks.kreig.chess.game.command.Command.MOVE_COMMAND;
 
+/** Default implementation that parses a valid command in string format and returns a Command object */
 public class CommandParserImpl implements CommandParser {
     private static final String MOVE_COMMAND_REGEX = "^MOVE\\s+([A-H])([1-8])\\s+TO\\s+([A-H])([1-8])$";
     private final Pattern moveCommandPattern = Pattern.compile(MOVE_COMMAND_REGEX, Pattern.CASE_INSENSITIVE);

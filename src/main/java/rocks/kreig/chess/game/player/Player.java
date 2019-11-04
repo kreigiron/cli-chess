@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/** Player abstraction identified by color, labeled by name, and can contains the pieces available and pieces captured */
 public class Player {
     private final String name;
     private final PlayerColor playerColor;

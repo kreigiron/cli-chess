@@ -9,8 +9,8 @@ import rocks.kreig.chess.game.player.Player;
 import rocks.kreig.chess.game.player.PlayerColor;
 import rocks.kreig.chess.game.player.Turn;
 import rocks.kreig.chess.game.player.TurnStatus;
-
-public class ChessGameImpl implements Game {
+/** Chess game default implementation */
+public class ChessGame implements Game {
 
     private Turn currentTurn;
     private Player white;

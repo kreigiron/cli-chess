@@ -1,5 +1,6 @@
 package rocks.kreig.chess.game.command;
 
+/** Abstraction for a command to be used in movements*/
 public class Command {
     public static final int MOVE_COMMAND = 1;
 

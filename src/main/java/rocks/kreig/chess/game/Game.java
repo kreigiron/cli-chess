@@ -6,6 +6,7 @@ import rocks.kreig.chess.game.player.Player;
 import rocks.kreig.chess.game.player.Turn;
 import rocks.kreig.chess.game.player.TurnStatus;
 
+/** Game interface to be implemented by other frontends */
 public interface Game {
 
     boolean hasNextTurn();

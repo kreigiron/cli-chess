@@ -1,7 +1,7 @@
 package rocks.kreig.chess.game.player;
 
 import rocks.kreig.chess.game.piece.Piece;
-
+/** Status recorded for the current turn */
 public class TurnStatus {
 
     private boolean checked;
