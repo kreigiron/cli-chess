@@ -20,6 +20,8 @@ $ java -jar build/libs/cli-chess-1.0-SNAPSHOT.jar
 
 * Insert requested player names
 * Insert an initial command to play for each player
+ - Black player pieces are in uppercase
+ - White player pieces are in lowercase
 * enjoy
 
 ## Valid Commands
