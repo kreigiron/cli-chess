@@ -1,6 +1,20 @@
 # cli-chess
 
-a Command Line Chess... 
+a Command Line Chess...
+
+## Requirements 
+- JDK 1.8
+- gradle
+- a Unix console which support terminal colors
+
+## How to compile
+
+$ cd ${project_root_path}
+$ ./gradlew jar
+
+## How to run
+$ cd ${project_root_path}
+$ java -jar build/libs/cli-chess-1.0-SNAPSHOT.jar
 
 ## How to play:
 
